@@ -8,6 +8,8 @@
         <p>Con tu cuenta puedes pedir citas y ver su estado.</p>
     </div>
 
+    @include('partials.avisos')
+
     <form method="POST" action="{{ route('registro') }}" class="formulario" novalidate>
         @csrf
 
