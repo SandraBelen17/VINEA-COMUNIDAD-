@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\PanelController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 // ---------- Sitio público ----------
 Route::view('/', 'publico.inicio')->name('inicio');
-Route::view('/horarios', 'publico.construccion', ['titulo' => 'Horarios'])->name('horarios');
+Route::get('/horarios', [HorarioController::class, 'publico'])->name('horarios');
 Route::view('/calendario', 'publico.construccion', ['titulo' => 'Calendario'])->name('calendario');
 Route::view('/grupos', 'publico.construccion', ['titulo' => 'Grupos'])->name('grupos');
 Route::view('/muro', 'publico.construccion', ['titulo' => 'Muro de oraciones'])->name('muro');
@@ -41,7 +42,12 @@ Route::middleware(['auth', 'rol:Administrador,Editor'])->prefix('panel')->name('
     Route::get('/', [PanelController::class, 'resumen'])->name('resumen');
     Route::view('/eventos', 'panel.construccion', ['titulo' => 'Eventos'])->name('eventos');
     Route::view('/grupos', 'panel.construccion', ['titulo' => 'Grupos'])->name('grupos');
-    Route::view('/horarios', 'panel.construccion', ['titulo' => 'Horarios'])->name('horarios');
+    // Horarios (misa, confesión y oficina)
+    Route::get('/horarios', [HorarioController::class, 'index'])->name('horarios');
+    Route::post('/horarios', [HorarioController::class, 'guardar'])->name('horarios.guardar');
+    Route::get('/horarios/{horario}/editar', [HorarioController::class, 'editar'])->name('horarios.editar');
+    Route::put('/horarios/{horario}', [HorarioController::class, 'actualizar'])->name('horarios.actualizar');
+    Route::delete('/horarios/{horario}', [HorarioController::class, 'eliminar'])->name('horarios.eliminar');
     Route::view('/intenciones', 'panel.construccion', ['titulo' => 'Intenciones'])->name('intenciones');
     // El Editor ve las citas pero no puede aprobarlas ni rechazarlas (se controla en el módulo Citas).
     Route::view('/citas', 'panel.construccion', ['titulo' => 'Citas'])->name('citas');

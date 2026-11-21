@@ -12,5 +12,6 @@ La base **no** se crea con migraciones de Laravel: se crea con estos scripts.
 | 06-todo-junto.sql | Todo lo anterior en un solo archivo (local, XAMPP) |
 | 06-todo-junto-infinityfree.sql | Igual, pero sin CREATE DATABASE/USE (para phpMyAdmin de InfinityFree) |
 | 07-borrar-datos-prueba.sql | Borra los datos de prueba |
+| 08-horarios-reales.sql | Cambia los horarios de prueba por los reales (misas, confesión del jueves y oficina). Importarlo con la base ya seleccionada |
 
 Usuarios de prueba: admin@vinea.com / 12345 · editor@vinea.com / 678910 · cliente@vinea.com / 456321

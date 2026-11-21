@@ -37,7 +37,7 @@
                     @foreach (config('panel.menu') as $opcion)
                         @if ($usuario->tieneRol(...$opcion['roles']))
                             <li>
-                                <a href="{{ route($opcion['ruta']) }}" @if (request()->routeIs($opcion['ruta'])) aria-current="page" @endif>
+                                <a href="{{ route($opcion['ruta']) }}" @if (request()->routeIs($opcion['ruta'], $opcion['ruta'] . '.*')) aria-current="page" @endif>
                                     <i data-lucide="{{ $opcion['icono'] }}"></i> {{ $opcion['texto'] }}
                                 </a>
                             </li>

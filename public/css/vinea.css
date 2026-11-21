@@ -536,6 +536,169 @@ img { display: block; max-width: 100%; }
 .pendiente-texto { font-size: 1.0625rem; font-weight: 500; line-height: 1.4; }
 
 /* ==========================================================================
+   PÁGINAS INTERIORES: portada con foto
+   ========================================================================== */
+.portada {
+    position: relative;
+    min-height: 380px;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    background: var(--color-oscuro);
+    color: var(--color-fondo);
+}
+.portada > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.portada .slider-velo { background: rgba(10, 17, 40, 0.62); }
+.portada-texto {
+    position: relative;
+    width: 100%;
+    max-width: var(--ancho-max);
+    margin: 0 auto;
+    padding: 96px 24px 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.portada-texto .etiqueta { color: var(--color-fondo); letter-spacing: 0.16em; }
+.portada-texto h1 { color: var(--color-fondo); font-size: clamp(2.4rem, 5vw, 3.5rem); line-height: 1.1; }
+.portada-texto p { max-width: 640px; font-size: 1.125rem; color: #E4ECF5; }
+
+/* ==========================================================================
+   HORARIOS (público): semana en fichas
+   ========================================================================== */
+.seccion-horario { padding: 72px 0 0; }
+.seccion-horario:last-child { padding-bottom: 72px; }
+.seccion-horario .seccion-encabezado { margin-bottom: 32px; gap: 10px; }
+
+.semana-desliza { overflow-x: auto; }
+.semana {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    min-width: 680px;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 10px;
+}
+.dia {
+    padding: 18px 8px;
+    border: 1px solid var(--color-linea);
+    border-radius: var(--radio);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    text-align: center;
+    font-family: var(--fuente-titulos);
+}
+.dia-nombre {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-texto);
+}
+.dia-hora { font-size: 1.125rem; font-weight: 500; line-height: 1.25; color: var(--color-texto-suave); text-wrap: balance; }
+.dia-hora-parte { white-space: nowrap; } /* "8:00 pm" nunca se parte; si el rango no cabe, baja de línea después del guion */
+.dia-vacio { color: var(--color-linea); }
+.dia-nota { margin-top: -4px; font-size: 0.75rem; font-weight: 500; line-height: 1.2; color: var(--color-detalle); }
+
+.dia-hoy { background: var(--color-oscuro); border-color: var(--color-oscuro); }
+.dia-hoy .dia-nombre,
+.dia-hoy .dia-hora,
+.dia-hoy .dia-nota { color: var(--color-fondo); }
+.dia-hoy .dia-vacio { color: var(--color-pie-linea); }
+
+.lista-capillas {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    column-gap: 40px;
+    border-top: 1px solid var(--color-linea);
+}
+.lista-capillas li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 4px 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--color-linea);
+}
+.capilla-nombre { font-family: var(--fuente-titulos); font-weight: 600; }
+
+.nota-final {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+/* ==========================================================================
+   PANEL: filtros, tablas y formularios en caja
+   ========================================================================== */
+.filtros { display: flex; flex-wrap: wrap; gap: 8px; }
+.filtros a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--color-linea);
+    border-radius: 999px;
+    font-family: var(--fuente-titulos);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-texto-suave);
+    text-decoration: none;
+}
+.filtros a:hover { border-color: var(--color-primario); color: var(--color-texto); }
+.filtros a[aria-current="page"] { background: var(--color-oscuro); border-color: var(--color-oscuro); color: var(--color-fondo); }
+
+.tabla-desliza { overflow-x: auto; border-top: 1px solid var(--color-linea); }
+.tabla { width: 100%; min-width: 620px; border-collapse: collapse; }
+.tabla th,
+.tabla td { padding: 14px 12px; border-bottom: 1px solid var(--color-linea); text-align: left; vertical-align: middle; }
+.tabla th {
+    font-family: var(--fuente-titulos);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-texto-suave);
+}
+.tabla th:first-child, .tabla td:first-child { padding-left: 0; }
+.tabla .fila-activa td { background: var(--color-resaltado); }
+.tabla-vacia { padding: 32px 0; color: var(--color-texto-suave); }
+.tabla-acciones { display: flex; justify-content: flex-end; align-items: center; gap: 20px; }
+.tabla-acciones form { margin: 0; }
+.boton-texto.enlace { font-family: var(--fuente-titulos); font-size: var(--texto-chico); font-weight: 600; }
+.enlace-peligro { color: var(--color-error-texto); }
+.enlace-peligro:hover { color: var(--color-pie); }
+
+.caja-formulario {
+    padding: 28px;
+    border: 1px solid var(--color-linea);
+    border-radius: var(--radio);
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    scroll-margin-top: 24px;
+}
+.caja-formulario h2 { font-size: 1.375rem; }
+.caja-formulario form { display: flex; flex-direction: column; gap: 24px; }
+.campos-fila {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr));
+    gap: 20px;
+}
+.botones { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width: 1180px) {
