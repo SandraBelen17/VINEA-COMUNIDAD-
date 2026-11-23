@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventoController;
+use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\PanelController;
 use Illuminate\Support\Facades\Route;
@@ -19,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'publico.inicio')->name('inicio');
 Route::get('/horarios', [HorarioController::class, 'publico'])->name('horarios');
 Route::get('/calendario', [EventoController::class, 'publico'])->name('calendario');
-Route::view('/grupos', 'publico.construccion', ['titulo' => 'Grupos'])->name('grupos');
+Route::get('/grupos', [GrupoController::class, 'publico'])->name('grupos');
 Route::view('/muro', 'publico.construccion', ['titulo' => 'Muro de oraciones'])->name('muro');
 Route::view('/contacto', 'publico.construccion', ['titulo' => 'Contacto'])->name('contacto');
 
@@ -47,7 +48,12 @@ Route::middleware(['auth', 'rol:Administrador,Editor'])->prefix('panel')->name('
     Route::get('/eventos/{evento}/editar', [EventoController::class, 'editar'])->name('eventos.editar');
     Route::put('/eventos/{evento}', [EventoController::class, 'actualizar'])->name('eventos.actualizar');
     Route::delete('/eventos/{evento}', [EventoController::class, 'eliminar'])->name('eventos.eliminar');
-    Route::view('/grupos', 'panel.construccion', ['titulo' => 'Grupos'])->name('grupos');
+    // Grupos (solo los activos aparecen en /grupos)
+    Route::get('/grupos', [GrupoController::class, 'index'])->name('grupos');
+    Route::post('/grupos', [GrupoController::class, 'guardar'])->name('grupos.guardar');
+    Route::get('/grupos/{grupo}/editar', [GrupoController::class, 'editar'])->name('grupos.editar');
+    Route::put('/grupos/{grupo}', [GrupoController::class, 'actualizar'])->name('grupos.actualizar');
+    Route::delete('/grupos/{grupo}', [GrupoController::class, 'eliminar'])->name('grupos.eliminar');
     // Horarios (misa, confesión y oficina)
     Route::get('/horarios', [HorarioController::class, 'index'])->name('horarios');
     Route::post('/horarios', [HorarioController::class, 'guardar'])->name('horarios.guardar');

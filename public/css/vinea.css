@@ -755,6 +755,27 @@ img { display: block; max-width: 100%; }
 .evento-detalle { font-family: var(--fuente-titulos); font-size: 0.875rem; font-weight: 500; line-height: 1.4; }
 
 /* ==========================================================================
+   GRUPOS (público): lista con líneas finas
+   ========================================================================== */
+.seccion-grupos { padding: 72px 0; }
+.seccion-grupos .contenedor { display: flex; flex-direction: column; gap: 32px; }
+.grupos-vacio { padding: 28px 0; border-top: 1px solid var(--color-linea); }
+
+.lista-grupos { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-linea); }
+.lista-grupos li {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+    gap: 12px 40px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--color-linea);
+}
+.grupo-nombre { font-size: 1.625rem; font-weight: 500; line-height: 1.3; }
+.grupo-datos { display: flex; flex-direction: column; gap: 8px; }
+.grupo-descripcion { line-height: 1.6; white-space: pre-line; }
+.grupo-detalle { font-family: var(--fuente-titulos); font-size: 0.875rem; font-weight: 500; line-height: 1.4; }
+.grupos-unirte { align-self: flex-start; }
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width: 1180px) {
