@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CitaController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\HorarioController;
@@ -40,7 +41,9 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 // ---------- Cliente (feligrés) ----------
 Route::middleware(['auth', 'rol:Cliente'])->group(function () {
-    Route::view('/mis-citas', 'panel.construccion', ['titulo' => 'Mis citas'])->name('mis-citas');
+    // Solo SUS citas: el controlador filtra con su user_id (no hay rutas con id de cita)
+    Route::get('/mis-citas', [CitaController::class, 'misCitas'])->name('mis-citas');
+    Route::post('/mis-citas', [CitaController::class, 'pedir'])->name('mis-citas.pedir');
 });
 
 // ---------- Panel: Administrador y Editor ----------
@@ -69,12 +72,15 @@ Route::middleware(['auth', 'rol:Administrador,Editor'])->prefix('panel')->name('
     Route::patch('/intenciones/{intencion}/publicar', [IntencionController::class, 'publicar'])->name('intenciones.publicar');
     Route::patch('/intenciones/{intencion}/rechazar', [IntencionController::class, 'rechazar'])->name('intenciones.rechazar');
     Route::delete('/intenciones/{intencion}', [IntencionController::class, 'eliminar'])->name('intenciones.eliminar');
-    // El Editor ve las citas pero no puede aprobarlas ni rechazarlas (se controla en el módulo Citas).
-    Route::view('/citas', 'panel.construccion', ['titulo' => 'Citas'])->name('citas');
+    // Citas: el Editor solo las ve; aprobar y rechazar están abajo, en el grupo de solo Administrador
+    Route::get('/citas', [CitaController::class, 'index'])->name('citas');
 });
 
 // ---------- Panel: solo Administrador ----------
 Route::middleware(['auth', 'rol:Administrador'])->prefix('panel')->name('panel.')->group(function () {
+    // Solo el párroco decide las citas (el controlador también lo revisa)
+    Route::patch('/citas/{cita}/aprobar', [CitaController::class, 'aprobar'])->name('citas.aprobar');
+    Route::patch('/citas/{cita}/rechazar', [CitaController::class, 'rechazar'])->name('citas.rechazar');
     Route::view('/mensajes', 'panel.construccion', ['titulo' => 'Mensajes'])->name('mensajes');
     Route::view('/usuarios', 'panel.construccion', ['titulo' => 'Usuarios'])->name('usuarios');
     Route::view('/parroquia', 'panel.construccion', ['titulo' => 'Datos de la parroquia'])->name('parroquia');

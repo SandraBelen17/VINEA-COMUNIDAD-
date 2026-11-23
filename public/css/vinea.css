@@ -24,6 +24,8 @@
     --color-error-texto: #8A2A1B;
     --color-exito-fondo: #E1F0EA;
     --color-exito-texto: #1D5C41;
+    --color-aviso-fondo: #FCEFD9;  /* estado "Pendiente" */
+    --color-aviso-texto: #6E4300;
 
     /* Fuentes (cámbialas aquí y en el <link> de Google Fonts del layout) */
     --fuente-titulos: 'Rethink Sans', system-ui, sans-serif;
@@ -715,6 +717,7 @@ img { display: block; max-width: 100%; }
 .estado-ok { background: var(--color-exito-fondo); color: var(--color-exito-texto); }
 .estado-neutro { background: var(--color-resaltado); color: var(--color-primario); }
 .estado-error { background: var(--color-error-fondo); color: var(--color-error-texto); }
+.estado-aviso { background: var(--color-aviso-fondo); color: var(--color-aviso-texto); }
 
 /* ==========================================================================
    CALENDARIO (público): eventos del mes
@@ -890,6 +893,31 @@ img { display: block; max-width: 100%; }
 
 /* Paginación sencilla: Más recientes / Más antiguas */
 .paginas { display: flex; flex-wrap: wrap; gap: 24px; }
+
+/* ==========================================================================
+   CITAS: Mis citas (cliente) y tabla del panel
+   ========================================================================== */
+.bloque-citas { display: flex; flex-direction: column; gap: 20px; }
+.bloque-citas h2 { font-size: 1.625rem; font-weight: 500; }
+.bloque-separado { padding-top: 32px; border-top: 1px solid var(--color-linea); }
+.nota-chica { font-size: 0.875rem; }
+
+.lista-citas { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-linea); }
+.lista-citas li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-linea);
+}
+.cita-datos { display: flex; flex-direction: column; gap: 4px; }
+.cita-tipo { font-family: var(--fuente-titulos); font-size: 1.1875rem; font-weight: 500; line-height: 1.3; }
+.cita-cuando { font-family: var(--fuente-titulos); font-size: 0.875rem; line-height: 1.4; color: var(--color-texto-suave); }
+
+.tabla-citas { min-width: 820px; }
+.cita-motivo { min-width: 220px; white-space: pre-line; }
 
 /* ==========================================================================
    RESPONSIVO
