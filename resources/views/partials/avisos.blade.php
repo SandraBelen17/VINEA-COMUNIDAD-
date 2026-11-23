@@ -4,3 +4,6 @@
 @if (session('info'))
     <p class="aviso aviso-info" role="status">{{ session('info') }}</p>
 @endif
+@if (session('error'))
+    <p class="aviso aviso-error" role="alert">{{ session('error') }}</p>
+@endif

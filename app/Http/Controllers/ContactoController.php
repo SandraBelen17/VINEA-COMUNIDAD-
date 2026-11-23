@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Contacto;
 use App\Models\Horario;
+use App\Models\Parroquia;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 /**
@@ -21,12 +21,12 @@ class ContactoController extends Controller
     /** Formulario y "Visítanos" con los datos de la parroquia y el horario de oficina. */
     public function publico(): View
     {
-        $parroquia = DB::table('parroquia')->first();
+        $parroquia = Parroquia::actual(); // mismos datos que el pie de página (se editan en /panel/parroquia)
 
         return view('publico.contacto', [
             'direccion' => $parroquia?->direccion,
             'telefono' => $parroquia?->telefono,
-            'telefonoTexto' => Contacto::formatoTelefono($parroquia?->telefono),
+            'telefonoTexto' => $parroquia?->telefono_texto,
             'correo' => $parroquia?->correo,
             'oficina' => Horario::resumen('oficina'),
         ]);

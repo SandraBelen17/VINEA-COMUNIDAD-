@@ -958,6 +958,25 @@ a.dato-valor:hover { color: var(--color-primario); }
 .botones form { margin: 0; }
 
 /* ==========================================================================
+   USUARIOS y DATOS DE LA PARROQUIA (panel, solo Administrador)
+   ========================================================================== */
+.nota-campo { font-family: var(--fuente-titulos); font-size: 0.8125rem; line-height: 1.4; }
+.campo select:disabled { background: var(--color-resaltado); color: var(--color-texto-suave); }
+
+.parroquia-logo { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.parroquia-logo img { width: 96px; height: 96px; border-radius: 999px; }
+.formulario-parroquia { display: flex; flex-direction: column; gap: 24px; }
+.parroquia-pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 24px;
+    border-top: 1px solid var(--color-linea);
+}
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width: 1180px) {

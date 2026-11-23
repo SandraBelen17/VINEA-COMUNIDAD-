@@ -48,14 +48,21 @@
                 <div class="pie-marca">
                     <img src="{{ asset('img/logo-maria.png') }}" alt="">
                     <div class="pie-marca-texto">
-                        <span class="pie-titulo">Parroquia María Madre de Dios</span>
+                        <span class="pie-titulo">{{ $parroquia?->nombre ?? 'Parroquia María Madre de Dios' }}</span>
                         <span>Diócesis de Tehuacán, Puebla</span>
                     </div>
                 </div>
+                {{-- Dirección, teléfono y correo: tabla parroquia (se editan en /panel/parroquia) --}}
                 <div class="pie-lista">
-                    <span>Calle 9 Nte 2601, Santiago Tula</span>
-                    <span>75720 Tehuacán, Pue.</span>
-                    <a href="tel:2381392082">238 139 2082</a>
+                    @if ($parroquia?->direccion)
+                        <span>{{ $parroquia->direccion }}</span>
+                    @endif
+                    @if ($parroquia?->telefono)
+                        <a href="tel:{{ $parroquia->telefono_enlace }}">{{ $parroquia->telefono_texto }}</a>
+                    @endif
+                    @if ($parroquia?->correo)
+                        <a href="mailto:{{ $parroquia->correo }}">{{ $parroquia->correo }}</a>
+                    @endif
                 </div>
                 <div class="pie-lista">
                     <a href="{{ route('horarios') }}">Horarios</a>
@@ -64,7 +71,7 @@
                     <a href="{{ route('contacto') }}">Contacto</a>
                 </div>
             </div>
-            <div class="pie-final">© {{ date('Y') }} Parroquia María Madre de Dios</div>
+            <div class="pie-final">© {{ date('Y') }} {{ $parroquia?->nombre ?? 'Parroquia María Madre de Dios' }}</div>
         </div>
     </footer>
 

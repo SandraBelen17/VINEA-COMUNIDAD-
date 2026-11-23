@@ -8,6 +8,8 @@ use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\IntencionController;
 use App\Http\Controllers\PanelController;
+use App\Http\Controllers\ParroquiaController;
+use App\Http\Controllers\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -90,6 +92,13 @@ Route::middleware(['auth', 'rol:Administrador'])->prefix('panel')->name('panel.'
     Route::get('/mensajes/{contacto}', [ContactoController::class, 'ver'])->name('mensajes.ver');
     Route::patch('/mensajes/{contacto}/atender', [ContactoController::class, 'atender'])->name('mensajes.atender');
     Route::delete('/mensajes/{contacto}', [ContactoController::class, 'eliminar'])->name('mensajes.eliminar');
-    Route::view('/usuarios', 'panel.construccion', ['titulo' => 'Usuarios'])->name('usuarios');
-    Route::view('/parroquia', 'panel.construccion', ['titulo' => 'Datos de la parroquia'])->name('parroquia');
+    // Usuarios y su rol (rol_usuarios). Nadie se elimina ni se quita el rol de Administrador a sí mismo.
+    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios');
+    Route::post('/usuarios', [UsuarioController::class, 'guardar'])->name('usuarios.guardar');
+    Route::get('/usuarios/{usuario}/editar', [UsuarioController::class, 'editar'])->name('usuarios.editar');
+    Route::put('/usuarios/{usuario}', [UsuarioController::class, 'actualizar'])->name('usuarios.actualizar');
+    Route::delete('/usuarios/{usuario}', [UsuarioController::class, 'eliminar'])->name('usuarios.eliminar');
+    // Datos de la parroquia (salen en el pie de página y en /contacto)
+    Route::get('/parroquia', [ParroquiaController::class, 'editar'])->name('parroquia');
+    Route::put('/parroquia', [ParroquiaController::class, 'guardar'])->name('parroquia.guardar');
 });
