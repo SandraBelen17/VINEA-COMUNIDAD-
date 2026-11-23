@@ -18,6 +18,14 @@ return Application::configure(basePath: dirname(__DIR__))
             'rol' => CheckRole::class,
         ]);
 
+        // El rol se revisa ANTES de buscar el registro de la URL (route model binding).
+        // Si no, alguien sin permiso recibía 404 en ids que no existen y 403 en los que sí,
+        // y así podía averiguar qué mensajes, usuarios o citas existen.
+        $middleware->prependToPriorityList(
+            before: \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            prepend: CheckRole::class,
+        );
+
         // Si alguien con sesión abre /login o /registro, lo mandamos a su página.
         $middleware->redirectUsersTo(fn ($request) => $request->user()->rutaInicio());
     })

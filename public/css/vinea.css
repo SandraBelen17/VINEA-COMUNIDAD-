@@ -52,6 +52,7 @@ body {
     font-size: var(--texto-base);
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
+    font-variant-ligatures: no-common-ligatures; /* Rethink Sans convierte "(1)" en "①" con sus ligaduras */
 }
 
 h1, h2, h3, h4 {
@@ -478,7 +479,9 @@ img { display: block; max-width: 100%; }
     text-decoration: underline;
 }
 
-.panel-cuerpo { flex: 1 0 auto; display: flex; flex-wrap: wrap; }
+/* Computadora: menú y contenido lado a lado (el menú se estira hasta abajo).
+   En el celular pasan a dos renglones: ver el @media (max-width: 720px). */
+.panel-cuerpo { flex: 1 0 auto; display: flex; }
 
 .panel-lateral {
     flex: 1 1 220px;
@@ -574,7 +577,9 @@ img { display: block; max-width: 100%; }
 .seccion-horario:last-child { padding-bottom: 72px; }
 .seccion-horario .seccion-encabezado { margin-bottom: 32px; gap: 10px; }
 
-.semana-desliza { overflow-x: auto; }
+/* position: relative para que los textos .solo-lector (absolutos) de adentro queden
+   recortados aquí; si no, ensanchaban la página en el celular */
+.semana-desliza { position: relative; overflow-x: auto; }
 .semana {
     list-style: none;
     margin: 0;
@@ -663,7 +668,7 @@ img { display: block; max-width: 100%; }
 .filtros a:hover { border-color: var(--color-primario); color: var(--color-texto); }
 .filtros a[aria-current="page"] { background: var(--color-oscuro); border-color: var(--color-oscuro); color: var(--color-fondo); }
 
-.tabla-desliza { overflow-x: auto; border-top: 1px solid var(--color-linea); }
+.tabla-desliza { position: relative; overflow-x: auto; border-top: 1px solid var(--color-linea); } /* relative: ver .semana-desliza */
 .tabla { width: 100%; min-width: 620px; border-collapse: collapse; }
 .tabla th,
 .tabla td { padding: 14px 12px; border-bottom: 1px solid var(--color-linea); text-align: left; vertical-align: middle; }
@@ -1081,6 +1086,8 @@ a.dato-valor:hover { color: var(--color-primario); }
     .seccion, .construccion { padding: 64px 0; }
 
     .panel-encabezado-fila { padding: 12px 20px; }
+    /* flex-start: sin esto, en páginas cortas el renglón del menú se estiraba y dejaba un hueco en blanco */
+    .panel-cuerpo { flex-wrap: wrap; align-content: flex-start; }
     .panel-usuario-datos { align-items: flex-start; }
     .panel-lateral { border-right: 0; border-bottom: 1px solid var(--color-linea); padding: 12px; }
     .panel-menu { flex-direction: row; overflow-x: auto; gap: 4px; }
