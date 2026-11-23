@@ -64,6 +64,50 @@ class Horario extends Model
         return array_keys(self::DIAS)[$numero - 1];
     }
 
+    /**
+     * Resumen de un tipo de horario en pocas líneas, juntando los días seguidos con
+     * las mismas horas. Ej. oficina: ["Martes a domingo · 3:00 pm – 7:00 pm"].
+     * Se usa en /contacto. Si no hay horarios, regresa [].
+     */
+    public static function resumen(string $tipo): array
+    {
+        // Horas de cada día: ['martes' => '3:00 pm – 7:00 pm', ...]
+        $porDia = self::where('tipo', $tipo)->ordenados()->get()
+            ->groupBy('dia')
+            ->map(fn ($horarios) => $horarios
+                ->map(fn ($h) => self::formatoHora($h->hora_inicio) . ' – ' . self::formatoHora($h->hora_fin))
+                ->implode(' y '));
+
+        // Juntar días seguidos (en orden de la semana) que tienen las mismas horas
+        $grupos = [];
+        foreach (array_keys(self::DIAS) as $dia) {
+            $horas = $porDia[$dia] ?? null;
+            $ultimo = count($grupos) - 1;
+
+            if ($horas && $ultimo >= 0 && $grupos[$ultimo]['horas'] === $horas && $grupos[$ultimo]['seguido']) {
+                $grupos[$ultimo]['dias'][] = $dia;
+            } elseif ($horas) {
+                $grupos[] = ['dias' => [$dia], 'horas' => $horas, 'seguido' => true];
+            } elseif ($ultimo >= 0) {
+                $grupos[$ultimo]['seguido'] = false; // un día sin horario corta el grupo
+            }
+        }
+
+        return array_map(function ($grupo) {
+            $dias = $grupo['dias'];
+            $primero = self::DIAS[$dias[0]];
+            $ultimo = mb_strtolower(self::DIAS[end($dias)]);
+
+            $texto = match (count($dias)) {
+                1 => $primero,
+                2 => "$primero y $ultimo",
+                default => "$primero a $ultimo",
+            };
+
+            return $texto . ' · ' . $grupo['horas'];
+        }, $grupos);
+    }
+
     /** "19:00:00" → "7:00 pm" */
     public static function formatoHora(string $hora): string
     {

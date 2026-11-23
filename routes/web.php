@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CitaController;
+use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\HorarioController;
@@ -27,7 +28,10 @@ Route::get('/muro', [IntencionController::class, 'publico'])->name('muro');
 Route::post('/muro', [IntencionController::class, 'guardar'])
     ->middleware('throttle:muro') // máx. 5 por minuto (RateLimiter "muro" en AppServiceProvider)
     ->name('muro.guardar');
-Route::view('/contacto', 'publico.construccion', ['titulo' => 'Contacto'])->name('contacto');
+Route::get('/contacto', [ContactoController::class, 'publico'])->name('contacto');
+Route::post('/contacto', [ContactoController::class, 'enviar'])
+    ->middleware('throttle:contacto') // máx. 3 por minuto (RateLimiter "contacto" en AppServiceProvider)
+    ->name('contacto.enviar');
 
 // ---------- Cuenta (solo visitantes sin sesión) ----------
 Route::middleware('guest')->group(function () {
@@ -81,7 +85,11 @@ Route::middleware(['auth', 'rol:Administrador'])->prefix('panel')->name('panel.'
     // Solo el párroco decide las citas (el controlador también lo revisa)
     Route::patch('/citas/{cita}/aprobar', [CitaController::class, 'aprobar'])->name('citas.aprobar');
     Route::patch('/citas/{cita}/rechazar', [CitaController::class, 'rechazar'])->name('citas.rechazar');
-    Route::view('/mensajes', 'panel.construccion', ['titulo' => 'Mensajes'])->name('mensajes');
+    // Mensajes de /contacto (el Editor y el Cliente no entran: 403)
+    Route::get('/mensajes', [ContactoController::class, 'index'])->name('mensajes');
+    Route::get('/mensajes/{contacto}', [ContactoController::class, 'ver'])->name('mensajes.ver');
+    Route::patch('/mensajes/{contacto}/atender', [ContactoController::class, 'atender'])->name('mensajes.atender');
+    Route::delete('/mensajes/{contacto}', [ContactoController::class, 'eliminar'])->name('mensajes.eliminar');
     Route::view('/usuarios', 'panel.construccion', ['titulo' => 'Usuarios'])->name('usuarios');
     Route::view('/parroquia', 'panel.construccion', ['titulo' => 'Datos de la parroquia'])->name('parroquia');
 });

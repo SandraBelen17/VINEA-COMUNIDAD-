@@ -31,5 +31,14 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             });
         });
+
+        // Contacto: máximo 3 mensajes por minuto desde la misma IP (contra spam), igual que el muro.
+        RateLimiter::for('contacto', function (Request $request) {
+            return Limit::perMinute(3)->by($request->ip())->response(function () {
+                return back()->withInput()->withErrors([
+                    'mensaje' => 'Enviaste varios mensajes seguidos. Espera un minuto y vuelve a intentarlo.',
+                ]);
+            });
+        });
     }
 }
