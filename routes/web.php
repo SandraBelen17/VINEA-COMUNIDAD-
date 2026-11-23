@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventoController;
 use App\Http\Controllers\HorarioController;
 use App\Http\Controllers\PanelController;
 use Illuminate\Support\Facades\Route;
@@ -17,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 // ---------- Sitio público ----------
 Route::view('/', 'publico.inicio')->name('inicio');
 Route::get('/horarios', [HorarioController::class, 'publico'])->name('horarios');
-Route::view('/calendario', 'publico.construccion', ['titulo' => 'Calendario'])->name('calendario');
+Route::get('/calendario', [EventoController::class, 'publico'])->name('calendario');
 Route::view('/grupos', 'publico.construccion', ['titulo' => 'Grupos'])->name('grupos');
 Route::view('/muro', 'publico.construccion', ['titulo' => 'Muro de oraciones'])->name('muro');
 Route::view('/contacto', 'publico.construccion', ['titulo' => 'Contacto'])->name('contacto');
@@ -40,7 +41,12 @@ Route::middleware(['auth', 'rol:Cliente'])->group(function () {
 // ---------- Panel: Administrador y Editor ----------
 Route::middleware(['auth', 'rol:Administrador,Editor'])->prefix('panel')->name('panel.')->group(function () {
     Route::get('/', [PanelController::class, 'resumen'])->name('resumen');
-    Route::view('/eventos', 'panel.construccion', ['titulo' => 'Eventos'])->name('eventos');
+    // Eventos (aparecen en /calendario cuando están publicados)
+    Route::get('/eventos', [EventoController::class, 'index'])->name('eventos');
+    Route::post('/eventos', [EventoController::class, 'guardar'])->name('eventos.guardar');
+    Route::get('/eventos/{evento}/editar', [EventoController::class, 'editar'])->name('eventos.editar');
+    Route::put('/eventos/{evento}', [EventoController::class, 'actualizar'])->name('eventos.actualizar');
+    Route::delete('/eventos/{evento}', [EventoController::class, 'eliminar'])->name('eventos.eliminar');
     Route::view('/grupos', 'panel.construccion', ['titulo' => 'Grupos'])->name('grupos');
     // Horarios (misa, confesión y oficina)
     Route::get('/horarios', [HorarioController::class, 'index'])->name('horarios');
