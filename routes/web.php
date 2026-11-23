@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\IntencionController;
 use App\Http\Controllers\PanelController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,10 @@ Route::view('/', 'publico.inicio')->name('inicio');
 Route::get('/horarios', [HorarioController::class, 'publico'])->name('horarios');
 Route::get('/calendario', [EventoController::class, 'publico'])->name('calendario');
 Route::get('/grupos', [GrupoController::class, 'publico'])->name('grupos');
-Route::view('/muro', 'publico.construccion', ['titulo' => 'Muro de oraciones'])->name('muro');
+Route::get('/muro', [IntencionController::class, 'publico'])->name('muro');
+Route::post('/muro', [IntencionController::class, 'guardar'])
+    ->middleware('throttle:muro') // máx. 5 por minuto (RateLimiter "muro" en AppServiceProvider)
+    ->name('muro.guardar');
 Route::view('/contacto', 'publico.construccion', ['titulo' => 'Contacto'])->name('contacto');
 
 // ---------- Cuenta (solo visitantes sin sesión) ----------
@@ -60,7 +64,11 @@ Route::middleware(['auth', 'rol:Administrador,Editor'])->prefix('panel')->name('
     Route::get('/horarios/{horario}/editar', [HorarioController::class, 'editar'])->name('horarios.editar');
     Route::put('/horarios/{horario}', [HorarioController::class, 'actualizar'])->name('horarios.actualizar');
     Route::delete('/horarios/{horario}', [HorarioController::class, 'eliminar'])->name('horarios.eliminar');
-    Route::view('/intenciones', 'panel.construccion', ['titulo' => 'Intenciones'])->name('intenciones');
+    // Intenciones del muro (moderación: publicar o rechazar)
+    Route::get('/intenciones', [IntencionController::class, 'index'])->name('intenciones');
+    Route::patch('/intenciones/{intencion}/publicar', [IntencionController::class, 'publicar'])->name('intenciones.publicar');
+    Route::patch('/intenciones/{intencion}/rechazar', [IntencionController::class, 'rechazar'])->name('intenciones.rechazar');
+    Route::delete('/intenciones/{intencion}', [IntencionController::class, 'eliminar'])->name('intenciones.eliminar');
     // El Editor ve las citas pero no puede aprobarlas ni rechazarlas (se controla en el módulo Citas).
     Route::view('/citas', 'panel.construccion', ['titulo' => 'Citas'])->name('citas');
 });
