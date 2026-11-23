@@ -6,6 +6,7 @@ use App\Http\Controllers\ContactoController;
 use App\Http\Controllers\EventoController;
 use App\Http\Controllers\GrupoController;
 use App\Http\Controllers\HorarioController;
+use App\Http\Controllers\InicioController;
 use App\Http\Controllers\IntencionController;
 use App\Http\Controllers\PanelController;
 use App\Http\Controllers\ParroquiaController;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // ---------- Sitio público ----------
-Route::view('/', 'publico.inicio')->name('inicio');
+Route::get('/', [InicioController::class, 'index'])->name('inicio');
 Route::get('/horarios', [HorarioController::class, 'publico'])->name('horarios');
 Route::get('/calendario', [EventoController::class, 'publico'])->name('calendario');
 Route::get('/grupos', [GrupoController::class, 'publico'])->name('grupos');

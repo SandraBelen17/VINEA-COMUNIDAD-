@@ -52,4 +52,27 @@ document.addEventListener('DOMContentLoaded', function () {
             reiniciar();
         }
     }
+
+    // 4. Pestañas de horarios en Inicio (Misas / Confesiones / Oficina).
+    //    Sin JavaScript se ven las tres semanas; aquí se muestra solo la elegida.
+    document.querySelectorAll('[data-pestanas]').forEach(function (bloque) {
+        var botones = bloque.querySelectorAll('[data-pestanas-botones] button');
+        var paneles = bloque.querySelectorAll('[data-pestana-panel]');
+
+        function elegir(i) {
+            botones.forEach(function (boton, k) {
+                boton.setAttribute('aria-pressed', k === i ? 'true' : 'false');
+            });
+            paneles.forEach(function (panel, k) {
+                panel.hidden = k !== i;
+            });
+        }
+
+        bloque.querySelector('[data-pestanas-botones]').hidden = false;
+        bloque.classList.add('con-pestanas'); // oculta los títulos de cada semana
+        botones.forEach(function (boton, k) {
+            boton.addEventListener('click', function () { elegir(k); });
+        });
+        elegir(0);
+    });
 });

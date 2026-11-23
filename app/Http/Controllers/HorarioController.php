@@ -20,19 +20,10 @@ class HorarioController extends Controller
 
     public function publico(): View
     {
-        $horarios = Horario::ordenados()->get();
-
-        // $semana['misa']['lunes'] = horarios de misa del lunes, etc.
-        $semana = [];
-        foreach (array_keys(Horario::TIPOS) as $tipo) {
-            foreach (array_keys(Horario::DIAS) as $dia) {
-                $semana[$tipo][$dia] = $horarios->where('tipo', $tipo)->where('dia', $dia);
-            }
-        }
-
         return view('publico.horarios', [
-            'semana' => $semana,
+            'semana' => Horario::semana(), // también la usa Inicio
             'hoy' => Horario::diaDeHoy(),
+            'capillas' => config('parroquia.capillas'),
         ]);
     }
 

@@ -3,24 +3,13 @@
 @section('titulo', 'Horarios')
 
 @php
-    // Encabezado de cada semana: tipo => [etiqueta, título, ¿mostrar hora de fin?]
+    // Encabezado de cada semana: tipo => [etiqueta, título]
     $secciones = [
-        'misa' => ['Misas', 'Misa en el templo parroquial', false],
-        'confesion' => ['Confesiones', 'Sacramento de la reconciliación', true],
-        'oficina' => ['Oficina parroquial', 'Atención en oficina', true],
+        'misa' => ['Misas', 'Misa en el templo parroquial'],
+        'confesion' => ['Confesiones', 'Sacramento de la reconciliación'],
+        'oficina' => ['Oficina parroquial', 'Atención en oficina'],
     ];
-
-    // Misas en capillas: texto fijo (la tabla horarios no guarda el lugar)
-    $capillas = [
-        ['Lomas de la Soledad', 'Domingo', '9:00 am'],
-        ['San Francisco', 'Domingo', '10:00 am'],
-        ['Santa Cruz', 'Domingo', '11:40 am'],
-        ['San Judas Tadeo', 'Domingo', '5:00 pm'],
-        ['Virgen de Juquila (Observatorio)', 'Domingo', '6:00 pm'],
-        ['San Juan Bautista (Loma Bonita)', 'Domingo', '7:00 pm'],
-        ['Señor de la Misericordia', 'Sábado', '6:00 pm'],
-        ['Ermita de María de Guadalupe', 'Fechas especiales', null],
-    ];
+    // Las capillas ($capillas) vienen de config/parroquia.php (las mismas que en Inicio)
 @endphp
 
 @section('contenido')
@@ -34,7 +23,7 @@
         </div>
     </section>
 
-    @foreach ($secciones as $tipo => [$etiqueta, $titulo, $conFin])
+    @foreach ($secciones as $tipo => [$etiqueta, $titulo])
         <section class="seccion-horario" aria-labelledby="titulo-{{ $tipo }}">
             <div class="contenedor">
                 <div class="seccion-encabezado">
@@ -45,30 +34,7 @@
                     @endif
                 </div>
 
-                <div class="semana-desliza">
-                    <ul class="semana">
-                        @foreach (\App\Models\Horario::DIAS as $dia => $nombreDia)
-                            <li class="dia @if ($dia === $hoy) dia-hoy @endif">
-                                @if ($dia === $hoy)
-                                    <span class="dia-nombre">Hoy<span class="solo-lector">, {{ $nombreDia }}</span></span>
-                                @else
-                                    <span class="dia-nombre"><span aria-hidden="true">{{ \App\Models\Horario::DIAS_CORTOS[$dia] }}</span><span class="solo-lector">{{ $nombreDia }}</span></span>
-                                @endif
-
-                                @forelse ($semana[$tipo][$dia] as $h)
-                                    <span class="dia-hora">
-                                        <span class="dia-hora-parte">{{ $h->inicio_texto }}</span>@if ($conFin) – <span class="dia-hora-parte">{{ $h->fin_texto }}</span>@endif
-                                    </span>
-                                    @if ($tipo === 'confesion' && $dia === 'jueves' && $h->hora_inicio === '18:00:00')
-                                        <span class="dia-nota">Hora santa</span>
-                                    @endif
-                                @empty
-                                    <span class="dia-hora dia-vacio"><span aria-hidden="true">—</span><span class="solo-lector">Sin horario</span></span>
-                                @endforelse
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+                @include('partials.semana', ['tipo' => $tipo, 'horas' => $semana[$tipo], 'hoy' => $hoy])
             </div>
         </section>
     @endforeach
@@ -81,10 +47,10 @@
             </div>
 
             <ul class="lista-capillas">
-                @foreach ($capillas as [$capilla, $cuando, $hora])
+                @foreach ($capillas as $c)
                     <li>
-                        <span class="capilla-nombre">{{ $capilla }}</span>
-                        <span class="texto-suave">{{ $cuando }}@if ($hora) · {{ $hora }}@endif</span>
+                        <span class="capilla-nombre">{{ $c['nombre'] }}@if ($c['zona']) ({{ $c['zona'] }})@endif</span>
+                        <span class="texto-suave">{{ $c['dia'] }}@if ($c['hora']) · {{ $c['hora'] }}@endif</span>
                     </li>
                 @endforeach
             </ul>

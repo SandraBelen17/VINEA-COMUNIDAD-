@@ -56,6 +56,24 @@ class Horario extends Model
         return $consulta->orderByRaw("FIELD(dia, $dias)")->orderBy('hora_inicio');
     }
 
+    /**
+     * La semana completa para las fichas: $semana['misa']['lunes'] = horarios de misa del lunes, etc.
+     * La usan /horarios e Inicio con el parcial partials/semana.
+     */
+    public static function semana(): array
+    {
+        $horarios = self::ordenados()->get();
+
+        $semana = [];
+        foreach (array_keys(self::TIPOS) as $tipo) {
+            foreach (array_keys(self::DIAS) as $dia) {
+                $semana[$tipo][$dia] = $horarios->where('tipo', $tipo)->where('dia', $dia);
+            }
+        }
+
+        return $semana;
+    }
+
     /** Día de hoy como valor del ENUM (con la hora de México). */
     public static function diaDeHoy(): string
     {

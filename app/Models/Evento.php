@@ -52,6 +52,15 @@ class Evento extends Model
             ->orderBy('hora_inicio');
     }
 
+    /** Eventos publicados de hoy en adelante (incluye los de varios días que siguen en curso). */
+    public function scopeProximos(Builder $consulta): Builder
+    {
+        return $consulta->where('estado', 'publicado')
+            ->whereRaw('COALESCE(fecha_fin, fecha_inicio) >= ?', [now()->toDateString()])
+            ->orderBy('fecha_inicio')
+            ->orderBy('hora_inicio');
+    }
+
     /** "Diciembre 2026" */
     public static function nombreMes(Carbon $mes): string
     {

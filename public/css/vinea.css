@@ -74,6 +74,8 @@ a:hover { color: var(--color-pie); }
 
 img { display: block; max-width: 100%; }
 
+[hidden] { display: none !important; } /* que "hidden" gane aunque la clase tenga display: flex */
+
 [data-lucide], .icono { width: 18px; height: 18px; stroke-width: 1.75; flex: none; }
 
 .contenedor {
@@ -850,7 +852,8 @@ img { display: block; max-width: 100%; }
 
 /* Panel: pestañas subrayadas (Por revisar / Publicadas / Rechazadas) */
 .pestanas { display: flex; flex-wrap: wrap; gap: 4px 24px; }
-.pestanas a {
+.pestanas a,
+.pestanas button {
     display: inline-flex;
     align-items: center;
     min-height: 44px;
@@ -862,8 +865,11 @@ img { display: block; max-width: 100%; }
     text-underline-offset: 8px;
     text-decoration-thickness: 2px;
 }
-.pestanas a:hover { color: var(--color-texto); text-decoration: underline; }
-.pestanas a[aria-current="page"] { color: var(--color-texto); font-weight: 600; text-decoration: underline; }
+.pestanas button { padding: 0; border: 0; background: transparent; cursor: pointer; }
+.pestanas a:hover,
+.pestanas button:hover { color: var(--color-texto); text-decoration: underline; }
+.pestanas a[aria-current="page"],
+.pestanas button[aria-pressed="true"] { color: var(--color-texto); font-weight: 600; text-decoration: underline; }
 
 /* Panel: lista para revisar (texto a la izquierda, botones a la derecha) */
 .lista-revision { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-linea); }
@@ -977,6 +983,82 @@ a.dato-valor:hover { color: var(--color-primario); }
 }
 
 /* ==========================================================================
+   INICIO: secciones después del slider
+   ========================================================================== */
+.seccion-suave { background: var(--color-resaltado); }
+.seccion-columnas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: 48px;
+    align-items: start;
+}
+.seccion-columnas-anchas { grid-template-columns: repeat(auto-fit, minmax(min(420px, 100%), 1fr)); gap: 48px 64px; }
+.inicio-bloque { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.inicio-bloque > .enlace { align-self: flex-start; }
+
+/* 1. Parroquia */
+.inicio-foto { height: 520px; border-radius: var(--radio); overflow: hidden; }
+.inicio-foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 55%; }
+.parroquia-descripcion { max-width: 640px; color: var(--color-texto-suave); }
+.parroco { display: flex; flex-direction: column; gap: 4px; padding-top: 20px; border-top: 1px solid var(--color-linea); }
+.parroco-etiqueta { font-family: var(--fuente-titulos); font-size: 0.8125rem; font-weight: 500; color: var(--color-texto-suave); }
+.parroco-nombre { font-family: var(--fuente-titulos); font-size: 1.375rem; font-weight: 500; line-height: 1.3; }
+
+/* 2. Horarios con pestañas */
+.inicio-horarios-encabezado { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.inicio-horarios-encabezado .seccion-encabezado { gap: 12px; }
+.horario-panel { display: flex; flex-direction: column; gap: 16px; }
+.horario-panel-titulo { font-size: 1.125rem; }
+.con-pestanas .horario-panel-titulo { display: none; } /* con pestañas, el botón ya dice qué semana es */
+
+/* 3. Capillas (con zona) */
+.capilla-datos { display: flex; flex-direction: column; gap: 4px; }
+.capilla-datos .capilla-nombre { font-size: 1.3125rem; font-weight: 500; line-height: 1.3; }
+.capilla-zona { font-family: var(--fuente-titulos); font-size: 0.875rem; line-height: 1.4; color: var(--color-texto-suave); }
+.capilla-cuando { font-family: var(--fuente-titulos); font-size: 0.875rem; font-weight: 500; line-height: 1.3; }
+
+/* 4. Sacramentos (<details>) */
+.lista-sacramentos { border-top: 1px solid var(--color-linea); }
+.sacramento { border-bottom: 1px solid var(--color-linea); }
+.sacramento summary {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    cursor: pointer;
+    list-style: none;
+}
+.sacramento summary::-webkit-details-marker { display: none; }
+.sacramento summary:focus-visible { outline: 2px solid var(--color-detalle); outline-offset: 2px; }
+.sacramento-nombre { font-family: var(--fuente-titulos); font-size: 1.375rem; font-weight: 500; line-height: 1.3; }
+.sacramento-signo::before { content: "+"; font-family: var(--fuente-titulos); font-size: 1.625rem; line-height: 1; color: var(--color-primario); }
+.sacramento[open] .sacramento-signo::before { content: "−"; }
+.sacramento ul { margin: 0; padding: 0 0 24px 20px; display: flex; flex-direction: column; gap: 8px; color: var(--color-texto-suave); }
+
+/* 5. Próximos eventos (versión compacta de la lista del calendario) */
+.lista-eventos-compacta li { flex-wrap: nowrap; gap: 20px; padding: 20px 0; }
+.lista-eventos-compacta .evento-fecha { min-width: 56px; gap: 2px; }
+.lista-eventos-compacta .evento-dia { font-size: 1.875rem; }
+.lista-eventos-compacta .evento-datos { flex: 1 1 auto; gap: 4px; }
+.lista-eventos-compacta .evento-titulo { font-size: 1.25rem; }
+
+/* 6. Grupos (lista sencilla) */
+.lista-simple { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--color-linea); }
+.lista-simple li { display: flex; flex-direction: column; gap: 4px; padding: 20px 0; border-bottom: 1px solid var(--color-linea); font-size: var(--texto-chico); }
+.lista-simple-titulo { font-family: var(--fuente-titulos); font-size: 1.25rem; font-weight: 500; line-height: 1.3; }
+
+/* 7. Franja del muro de oraciones */
+.franja-muro { position: relative; overflow: hidden; padding: 120px 0; background: var(--color-oscuro); color: var(--color-fondo); }
+.franja-muro > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 40%; }
+.franja-muro .slider-velo { background: rgba(10, 17, 40, 0.66); }
+.franja-contenido { position: relative; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
+.franja-contenido .etiqueta { color: var(--color-fondo); letter-spacing: 0.16em; }
+.franja-contenido h2 { max-width: 640px; font-family: var(--fuente-texto); font-style: italic; font-weight: 500; line-height: 1.25; color: var(--color-fondo); }
+.boton-claro { min-height: 48px; padding: 0 24px; border-color: var(--color-fondo); background: var(--color-fondo); color: var(--color-oscuro); }
+.boton-claro:hover { background: var(--color-resaltado); border-color: var(--color-resaltado); color: var(--color-oscuro); }
+
+/* ==========================================================================
    RESPONSIVO
    ========================================================================== */
 @media (max-width: 1180px) {
@@ -1007,6 +1089,9 @@ a.dato-valor:hover { color: var(--color-primario); }
     .panel-principal { padding: 28px 20px 56px; }
 
     .acceso-foto { padding: 28px 24px; min-height: 280px; }
+
+    .inicio-foto { height: 300px; }
+    .franja-muro { padding: 80px 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
