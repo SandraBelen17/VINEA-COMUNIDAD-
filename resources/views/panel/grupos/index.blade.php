@@ -27,6 +27,7 @@
                     <th scope="col">Nombre</th>
                     <th scope="col">Horario</th>
                     <th scope="col">Lugar</th>
+                    <th scope="col">Coordinador</th>
                     <th scope="col">Estado</th>
                     <th scope="col"><span class="solo-lector">Acciones</span></th>
                 </tr>
@@ -37,6 +38,7 @@
                         <td>{{ $g->nombre }}</td>
                         <td>{{ $g->horario ?: '—' }}</td>
                         <td>{{ $g->lugar ?: '—' }}</td>
+                        <td>{{ $g->coordinador ?: '—' }}</td>
                         <td><span class="estado {{ $g->estado_clase }}">{{ $g->estado_texto }}</span></td>
                         <td>
                             <div class="tabla-acciones">
@@ -52,7 +54,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="tabla-vacia">Todavía no hay grupos registrados.</td>
+                        <td colspan="6" class="tabla-vacia">Todavía no hay grupos registrados.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -91,6 +93,21 @@
                 <label for="descripcion">Descripción</label>
                 <textarea id="descripcion" name="descripcion" rows="4" maxlength="2000" placeholder="A quién va dirigido y qué hacen">{{ $valor('descripcion') }}</textarea>
                 @error('descripcion') <span class="error-campo">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="campos-fila">
+                <div class="campo">
+                    <label for="coordinador">Coordinador</label>
+                    <input id="coordinador" name="coordinador" type="text" maxlength="150" value="{{ $valor('coordinador') }}" placeholder="Nombre de quien coordina">
+                    @error('coordinador') <span class="error-campo">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="campo">
+                    <label for="whatsapp">WhatsApp del coordinador</label>
+                    <input id="whatsapp" name="whatsapp" type="tel" inputmode="numeric" maxlength="20" value="{{ $valor('whatsapp') }}" placeholder="238 123 4567" aria-describedby="ayuda-whatsapp">
+                    <span id="ayuda-whatsapp" class="ayuda-campo">10 dígitos. Se mostrará en el sitio: pide permiso antes de ponerlo.</span>
+                    @error('whatsapp') <span class="error-campo">{{ $message }}</span> @enderror
+                </div>
             </div>
 
             <div class="campos-fila">

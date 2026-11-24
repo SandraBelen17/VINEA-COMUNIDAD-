@@ -186,6 +186,9 @@
                                 @if ($g->detalle_texto)
                                     <span class="texto-suave">{{ $g->detalle_texto }}</span>
                                 @endif
+                                @if ($g->coordinador)
+                                    <span class="texto-suave">Coordina: {{ $g->coordinador }}</span>
+                                @endif
                             </li>
                         @endforeach
                     </ul>

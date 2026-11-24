@@ -184,6 +184,12 @@ img { display: block; max-width: 100%; }
     border-color: var(--color-detalle);
 }
 
+.campo .ayuda-campo {
+    font-family: var(--fuente-titulos);
+    font-size: 0.8125rem;
+    color: var(--color-texto-suave);
+}
+
 .campo .error-campo {
     font-family: var(--fuente-titulos);
     font-size: 0.8125rem;
@@ -784,6 +790,9 @@ img { display: block; max-width: 100%; }
 .grupo-descripcion { line-height: 1.6; white-space: pre-line; }
 .grupo-detalle { font-family: var(--fuente-titulos); font-size: 0.875rem; font-weight: 500; line-height: 1.4; }
 .grupos-unirte { align-self: flex-start; }
+.grupo-contacto { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 8px; }
+.grupo-coordinador { font-family: var(--fuente-titulos); font-size: 0.9375rem; font-weight: 500; line-height: 1.4; }
+.boton-whatsapp { min-height: 44px; padding: 0 18px; }
 
 /* ==========================================================================
    MURO DE ORACIONES (público) e INTENCIONES (panel)

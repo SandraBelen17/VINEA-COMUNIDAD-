@@ -29,6 +29,18 @@
                                 @if ($g->detalle_texto)
                                     <p class="grupo-detalle">{{ $g->detalle_texto }}</p>
                                 @endif
+                                @if ($g->coordinador || $g->whatsapp_url)
+                                    <div class="grupo-contacto">
+                                        @if ($g->coordinador)
+                                            <p class="grupo-coordinador">Coordina: {{ $g->coordinador }}</p>
+                                        @endif
+                                        @if ($g->whatsapp_url)
+                                            <a href="{{ $g->whatsapp_url }}" class="boton boton-linea boton-whatsapp" target="_blank" rel="noopener">
+                                                <i data-lucide="message-circle"></i> Escribir por WhatsApp
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </li>
                     @endforeach
